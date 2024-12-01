@@ -81,6 +81,21 @@ return {
 			else
 				return string.format('%ds', execTime)
 			end
+		end,
+		execTimeBool = function(segment)
+			if not execTime then
+				execTime = {stamp = os.time()}
+				bait.catch('command.preexec', function()
+					execTime.stamp = os.time()
+				end)
+			end
+
+			local execTime = os.time() - execTime.stamp
+			segment.defaults.condition = function()
+				return execTime > 1
+			end
+
+			return ""
 		end
 	}
 }
